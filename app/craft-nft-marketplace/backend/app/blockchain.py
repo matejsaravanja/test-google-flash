@@ -75,7 +75,7 @@ def mint_nft_transaction(receiver_public_key: str):
 
 
         #Sanity Check for validity (remove in prod, slows things down a bit)
-        transaction.verify()
+        #transaction.verify()
         return transaction
 
     except Exception as e:
