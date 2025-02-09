@@ -16,4 +16,32 @@ services:
       EMAIL_HOST_USER: "your_email@example.com"
       EMAIL_HOST_PASSWORD: "your_email_password"
       EMAIL_FROM_ADDRESS: "your_email@example.com"
-      MARKETPLACE_FEE:.
+      MARKETPLACE_FEE: 0.02
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A app.tasks worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SOLANA_NETWORK: "http://127.0.0.1:8899"
+      CRAFT_MINT_ADDRESS: "YOUR_CRAFT_MINT_ADDRESS"
+      APPLICATION_WALLET_PRIVATE_KEY: "YOUR_APPLICATION_WALLET_PRIVATE_KEY"
+      TREASURY_WALLET_PUBLIC_KEY: "YOUR_TREASURY_WALLET_PUBLIC_KEY"
+      EMAIL_HOST: "smtp.example.com" #Ex: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_HOST_USER: "your_email@example.com"
+      EMAIL_HOST_PASSWORD: "your_email_password"
+      EMAIL_FROM_ADDRESS: "your_email@example.com"
+      MARKETPLACE_FEE: 0.02
+    depends_on:
+      - api
+      - redis
