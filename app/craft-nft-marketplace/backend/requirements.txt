@@ -1,0 +1,13 @@
+fastapi==0.109.2
+uvicorn==0.27.0
+python-jose==3.3.0
+passlib==1.7.4
+python-multipart==0.0.6
+fastapi-middleware==0.1.5
+solana==0.28.1
+pydantic==2.6.0
+email-validator==2.1
+sqlalchemy==2.0.26
+psycopg2-binary==2.9.9
+celery[redis]==5.3.6
+svgwrite==1.4.3
