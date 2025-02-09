@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from fastapi import BackgroundTasks
 import secrets
 from .utils import generate_keypair, validate_public_key
+from .tasks import send_email_task
 
 app = FastAPI()
 
@@ -135,8 +136,8 @@ async def mint_nft(request: NFTMintRequest, background_tasks: BackgroundTasks, t
         # 3. Generate Unique NFT
         nft_svg = generate_unique_nft(signature)
 
-        # 4. Send NFT via email
-        background_tasks.add_task(send_nft_email, user['sub'], nft_svg, signature, signature) #User sub is user email!
+        # 4. Send NFT via email through Celery
+        send_email_task.delay(user['sub'], nft_svg, signature, signature) #User sub is user email!
 
         # 5. Return the NFT details
         return {"transaction_hash": signature, "nft_svg": nft_svg}
